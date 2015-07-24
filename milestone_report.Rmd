@@ -1,0 +1,146 @@
+Data Science Capstone - Milestone Report
+---------
+---------
+
+Objective
+---------
+The objective of this report is to demonstrate that I am able to work with the data, perform some exploratory analysis and briefly summarize plans for the Shiny app and algorithm. The datasets are large so in the interest of faster processing I will use 5% of the English dataset in this milestone report.
+
+Data Loading and Pre-processing
+---------
+```{r cache=TRUE}
+#load and read in 3 data files
+blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE) #original Blogs file
+news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE) #original News file
+twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE) #original Twitter file
+
+#create sample data set for faster processing.
+blogs <- blogs[rbinom(length(blogs)*0.05, length(blogs), .5)]
+write.csv(blogs, file = "~/Coursera/CapstoneData/sample/blogs_sample.csv", row.names = FALSE)
+news <- news[rbinom(length(news)*0.05, length(news), .5)]
+write.csv(news, file = "~/Coursera/CapstoneData/sample/news_sample.csv", row.names = FALSE)
+twitter <- twitter[rbinom(length(twitter)*0.05, length(twitter), .5)]
+write.csv(twitter, file = "~/Coursera/CapstoneData/sample/twitter_sample.csv", row.names = FALSE)
+
+#exploration begins
+numberoflines <- c(length(blogs), length(news), length(twitter))
+numberofwords <- c(sum(sapply(strsplit(blogs, " "), length)), sum(sapply(strsplit(news, " "), length)), sum(sapply(strsplit(twitter, " "), length)))
+maxnumberofwords <- c(max(sapply(strsplit(blogs, " "), length)), max(sapply(strsplit(news, " "), length)), max(sapply(strsplit(twitter, " "), length)))
+minnumberofwords <- c(min(sapply(strsplit(blogs, " "), length)), min(sapply(strsplit(news, " "), length)), min(sapply(strsplit(twitter, " "), length)))
+                      
+df <- data.frame(numberoflines, numberofwords, maxnumberofwords, minnumberofwords)
+names(df) <- c("Lines", "Words", "Maximum Words in a Line", "Minimum Words in a Line")
+row.names(df) <- c("Blogs", "News", "Twitter")
+
+```
+
+Basic Summary
+----------
+
+Here is a basic summary of the 3 files before performing any transformations. Number of lines in each file, number of words separate by a blank space " " and maximum number of words in a single line are reported.
+
+```{r}
+df
+```
+
+Let's create the Corpus, transform it and analyze it. Transformation includes removing punctuation, numbers, converting to lowercase and sparse terms. I will not remove stop words because they will be among the words predicted. 
+
+```{r}
+suppressMessages(suppressWarnings(require(tm)))
+
+mycorpus <- Corpus(DirSource("~/Coursera/CapstoneData/sample/"), readerControl=list(language="en_US"))
+#mycorpus <- Corpus(VectorSource(c(blogs, news, twitter)), readerControl=list(language="en_US"))
+mycorpus <- tm_map(mycorpus, content_transformer(tolower))
+mycorpus <- tm_map(mycorpus, removePunctuation)
+mycorpus <- tm_map(mycorpus, removeNumbers)
+mycorpus <- tm_map(mycorpus, stripWhitespace)
+
+dtm <- DocumentTermMatrix(mycorpus)
+dtm <- as.matrix(dtm)
+f <- colSums(dtm)
+f <- sort(f, decreasing=TRUE)
+barplot(head(f, 25), 
+        main="Top 25 Most Frequent Words (stop words not removed)",
+        xlab="word in Corpus",
+        ylab="times word showed up",
+        las=2,
+        col="red")
+```
+
+N-Grams
+-------------
+
+Here is plot to show frequency of 2-word phrases by tokenizing using NGramTokenizer. Clearly there are a lot of stopwords.
+
+```{r}
+suppressMessages(suppressWarnings(require(RWeka)))
+
+ngram2 <- NGramTokenizer(mycorpus, Weka_control(min=2, max=2))
+ngram2 <- data.frame(table(ngram2))
+ngram2 <- ngram2[order(ngram2$Freq, decreasing = TRUE),]
+barplot(head(ngram2$Freq, 25), 
+        names.arg = head(ngram2$ngram2, 25),
+        main="Top 25 Most Frequent 2-word Phrases",
+        las=2,
+        col="blue")
+```
+
+And a plot to show frequency of 3-word phrases. Frequency of stopwords is reducing.
+
+```{r}
+
+ngram3 <- NGramTokenizer(mycorpus, Weka_control(min=3, max=3))
+ngram3 <- data.frame(table(ngram3))
+ngram3 <- ngram3[order(ngram3$Freq, decreasing = TRUE),]
+barplot(head(ngram3$Freq, 25), 
+        names.arg = head(ngram3$ngram3, 25),
+        main="Top 25 Most Frequent 3-word Phrases",
+        las=2,
+        col="green")
+```
+
+How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
+
+Basically we need to find out how many instances of unique words cover 50%/90% of all word instances in the selected Corpus.
+
+```{r}
+
+ngram1 <- NGramTokenizer(mycorpus, Weka_control(min=1, max=1))
+ngram1 <- data.frame(table(ngram1))
+ngram1 <- ngram1[order(ngram1$Freq, decreasing = TRUE),]
+
+cover50 <- 0
+for(i in 1:length(ngram1$Freq)) {
+  cover50 <- cover50 + ngram1$Freq[i]
+  if(cover50 >= 0.5*sum(ngram1$Freq))
+    {break}
+}
+
+print(paste(i, "words with", cover50, "instances cover 50% of", sum(ngram1$Freq), "words in the Corpus."))
+
+cover90 <- 0
+for(i in 1:length(ngram1$Freq)) {
+  cover90 <- cover90 + ngram1$Freq[i]
+  if(cover90 >= 0.9*sum(ngram1$Freq))
+    {break}
+}
+
+print(paste(i, "words with", cover90, "instances cover 90% of", sum(ngram1$Freq), "words in the Corpus."))
+
+```
+
+Finally, no exploration is complete without the cool looking cloud. So here is the cloud of words with minimum frequency of 25. The cloud of words don't really solve any purpose other than they look cool.
+
+```{r}
+suppressMessages(suppressWarnings(require(wordcloud)))
+wordcloud (mycorpus, min.freq = 25, colors=brewer.pal(8, "Dark2"), scale=c(5, 0.04))
+```
+
+
+Interesting findings
+-----------
+Nothing interesting to report. Sorry! I am having fun learning NLP though.
+
+Plans for final report
+-----------
+I plan to explore tokenization using RWeka, string manipulation using stringr and tm and stylo for stylometric analysis. Some concepts of interest are Katz N-gram model, Kneser-Ney smoothing and Markov assumption.
