@@ -17,11 +17,8 @@ twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", sk
 
 #create sample data set for faster processing.
 blogs <- blogs[rbinom(length(blogs)*0.05, length(blogs), .5)]
-write.csv(blogs, file = "~/Coursera/CapstoneData/sample/blogs_sample.csv", row.names = FALSE)
 news <- news[rbinom(length(news)*0.05, length(news), .5)]
-write.csv(news, file = "~/Coursera/CapstoneData/sample/news_sample.csv", row.names = FALSE)
 twitter <- twitter[rbinom(length(twitter)*0.05, length(twitter), .5)]
-write.csv(twitter, file = "~/Coursera/CapstoneData/sample/twitter_sample.csv", row.names = FALSE)
 
 #exploration begins
 numberoflines <- c(length(blogs), length(news), length(twitter))
@@ -49,16 +46,12 @@ Let's create the Corpus, transform it and analyze it. Transformation includes re
 ```{r}
 suppressMessages(suppressWarnings(require(tm)))
 
-mycorpus <- Corpus(DirSource("~/Coursera/CapstoneData/sample/"), readerControl=list(language="en_US"))
-#mycorpus <- Corpus(VectorSource(c(blogs, news, twitter)), readerControl=list(language="en_US"))
-mycorpus <- tm_map(mycorpus, content_transformer(tolower))
-mycorpus <- tm_map(mycorpus, removePunctuation)
-mycorpus <- tm_map(mycorpus, removeNumbers)
-mycorpus <- tm_map(mycorpus, stripWhitespace)
-
-dtm <- DocumentTermMatrix(mycorpus)
-dtm <- as.matrix(dtm)
-f <- colSums(dtm)
+txt <- c(blogs, news, twitter)
+txt <- gsub("[^[:alnum:][:space:]']", "", txt)
+txt <- gsub("[[:digit:]]", "", txt)
+txt <- tolower(txt)
+txt <- unlist(strsplit(txt, " "))
+f <- table(txt)
 f <- sort(f, decreasing=TRUE)
 barplot(head(f, 25), 
         main="Top 25 Most Frequent Words (stop words not removed)",
@@ -76,7 +69,7 @@ Here is plot to show frequency of 2-word phrases by tokenizing using NGramTokeni
 ```{r}
 suppressMessages(suppressWarnings(require(RWeka)))
 
-ngram2 <- NGramTokenizer(mycorpus, Weka_control(min=2, max=2))
+ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=2))
 ngram2 <- data.frame(table(ngram2))
 ngram2 <- ngram2[order(ngram2$Freq, decreasing = TRUE),]
 barplot(head(ngram2$Freq, 25), 
@@ -90,7 +83,7 @@ And a plot to show frequency of 3-word phrases. Frequency of stopwords is reduci
 
 ```{r}
 
-ngram3 <- NGramTokenizer(mycorpus, Weka_control(min=3, max=3))
+ngram3 <- NGramTokenizer(txt, Weka_control(min=3, max=3))
 ngram3 <- data.frame(table(ngram3))
 ngram3 <- ngram3[order(ngram3$Freq, decreasing = TRUE),]
 barplot(head(ngram3$Freq, 25), 
@@ -106,7 +99,7 @@ Basically we need to find out how many instances of unique words cover 50%/90% o
 
 ```{r}
 
-ngram1 <- NGramTokenizer(mycorpus, Weka_control(min=1, max=1))
+ngram1 <- NGramTokenizer(txt, Weka_control(min=1, max=1))
 ngram1 <- data.frame(table(ngram1))
 ngram1 <- ngram1[order(ngram1$Freq, decreasing = TRUE),]
 
@@ -130,11 +123,11 @@ print(paste(i, "words with", cover90, "instances cover 90% of", sum(ngram1$Freq)
 
 ```
 
-Finally, no exploration is complete without the cool looking cloud. So here is the cloud of words with minimum frequency of 25. The cloud of words don't really solve any purpose other than they look cool.
+Finally, no exploration is complete without showing the cloud. So here is the cloud of words of top 25 frequent words. The cloud of words don't really solve any purpose other than they look cool.
 
 ```{r}
 suppressMessages(suppressWarnings(require(wordcloud)))
-wordcloud (mycorpus, min.freq = 25, colors=brewer.pal(8, "Dark2"), scale=c(5, 0.04))
+wordcloud (words=head(ngram1$ngram1, 25), freq=head(ngram1$Freq, 25), colors=brewer.pal(8, "Dark2"), scale=c(5, 0.10))
 ```
 
 
