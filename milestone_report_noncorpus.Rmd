@@ -10,10 +10,10 @@ Data Loading and Pre-processing
 ---------
 ```{r cache=TRUE}
 #load and read in 3 data files
-options(java.parameters = "-Xmx4g")
-blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE) #original Blogs file
-news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE) #original News file
-twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE) #original Twitter file
+options(java.parameters = "-Xmx6g")
+blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE, n=15000) #original Blogs file
+news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE, n=15000) #original News file
+twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE, n=15000) #original Twitter file
 
 #create sample data set for faster processing.
 blogs <- blogs[rbinom(length(blogs)*0.05, length(blogs), .5)]
@@ -59,6 +59,7 @@ barplot(head(f, 25),
         ylab="times word showed up",
         las=2,
         col="red")
+rm(blogs, news, twitter, f)
 ```
 
 N-Grams
@@ -69,7 +70,8 @@ Here is plot to show frequency of 2-word phrases by tokenizing using NGramTokeni
 ```{r}
 suppressMessages(suppressWarnings(require(RWeka)))
 
-ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=2))
+txt1 <- Corpus(VectorSource(txt), readerControl=list(language="en_US"))
+ngram2 <- NGramTokenizer(txt1, Weka_control(min=2, max=2, delimiters=" .,;:?!"))
 ngram2 <- data.frame(table(ngram2))
 ngram2 <- ngram2[order(ngram2$Freq, decreasing = TRUE),]
 barplot(head(ngram2$Freq, 25), 
@@ -77,13 +79,14 @@ barplot(head(ngram2$Freq, 25),
         main="Top 25 Most Frequent 2-word Phrases",
         las=2,
         col="blue")
+rm(ngram2)
 ```
 
 And a plot to show frequency of 3-word phrases. Frequency of stopwords is reducing.
 
 ```{r}
 
-ngram3 <- NGramTokenizer(txt, Weka_control(min=3, max=3))
+ngram3 <- NGramTokenizer(txt, Weka_control(min=3, max=3, delimiters=" .,;:?!"))
 ngram3 <- data.frame(table(ngram3))
 ngram3 <- ngram3[order(ngram3$Freq, decreasing = TRUE),]
 barplot(head(ngram3$Freq, 25), 
@@ -91,6 +94,7 @@ barplot(head(ngram3$Freq, 25),
         main="Top 25 Most Frequent 3-word Phrases",
         las=2,
         col="green")
+rm(ngram3)
 ```
 
 How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
@@ -99,7 +103,7 @@ Basically we need to find out how many instances of unique words cover 50%/90% o
 
 ```{r}
 
-ngram1 <- NGramTokenizer(txt, Weka_control(min=1, max=1))
+ngram1 <- NGramTokenizer(txt, Weka_control(min=1, max=1, delimiters=" .,;:?!"))
 ngram1 <- data.frame(table(ngram1))
 ngram1 <- ngram1[order(ngram1$Freq, decreasing = TRUE),]
 

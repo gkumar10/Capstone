@@ -11,9 +11,9 @@ Data Loading and Pre-processing
 ```{r cache=TRUE}
 #load and read in 3 data files
 options(java.parameters = "-Xmx4g")
-blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE) #original Blogs file
-news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE) #original News file
-twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE) #original Twitter file
+blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE, n=15000) #original Blogs file
+news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE, n=15000) #original News file
+twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE, n=15000) #original Twitter file
 
 #create sample data set for faster processing.
 blogs <- blogs[rbinom(length(blogs)*0.05, length(blogs), .5)]
