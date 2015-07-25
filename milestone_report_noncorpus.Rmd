@@ -14,7 +14,7 @@ Data Loading and Pre-processing
 ```{r cache=TRUE}
 #load and read in 3 data files
 options(java.parameters = "-Xmx6g")
-require(graphics)
+
 blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE, n=15000) #original Blogs file
 news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE, n=15000) #original News file
 twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE, n=15000) #original Twitter file
@@ -45,7 +45,7 @@ Here is a basic summary of the 3 files before performing any transformations. Nu
 df
 ```
 
-Let's create the Corpus, transform it and analyze it. Transformation includes removing punctuation, numbers, converting to lowercase and sparse terms. I will not remove stop words because they will be among the words predicted. 
+Let's create the text dataset, transform it and analyze it. Transformation includes removing punctuation, numbers, converting to lowercase and sparse terms. I will not remove stop words because they will be among the words predicted. 
 
 ```{r}
 suppressMessages(suppressWarnings(require(tm)))
@@ -54,7 +54,7 @@ txt <- c(blogs, news, twitter)
 txt <- gsub("[^[:alnum:][:space:]']", "", txt)
 txt <- gsub("[[:digit:]]", "", txt)
 txt <- tolower(txt)
-txt <- unlist(strsplit(txt, " "))
+#txt <- unlist(strsplit(txt, " "))
 f <- table(txt)
 f <- sort(f, decreasing=TRUE)
 barplot(head(f, 25), 
@@ -74,14 +74,19 @@ Here is plot to show frequency of 2-word phrases by tokenizing using NGramTokeni
 ```{r}
 suppressMessages(suppressWarnings(require(RWeka)))
 
-ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=2, delimiters=" .,;:?!"))
+#txt <- c("This is the first document.", "This is the second file.", "This is the third text.", "you're great", "isn't it")
+head(txt, 100)
+ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=2, delimiters=(" .,;:")))
+head(ngram2, 25)
 ngram2 <- table(ngram2)
+head(ngram2, 25)
 ngram2 <- sort(ngram2, decreasing=TRUE)
+class(ngram2)
+head(ngram2, 25)
 barplot(head(ngram2, 25), 
         main="Top 25 Most Frequent 2-word Phrases",
         las=2,
-        col="blue",
-        xlim=xlim)
+        col="blue", xlim=c(0,0), ylim=c(0,0))
 #rm(ngram2)
 ```
 
@@ -95,13 +100,13 @@ ngram3 <- sort(ngram3, decreasing=TRUE)
 barplot(head(ngram3, 25), 
         main="Top 25 Most Frequent 3-word Phrases",
         las=2,
-        col="green")
+        col="green", xlim=c(0,0), ylim=c(0,0))
 #rm(ngram3)
 ```
 
 How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
-Basically we need to find out how many instances of unique words cover 50%/90% of all word instances in the selected Corpus.
+Basically we need to find out how many instances of unique words cover 50%/90% of all word instances in the selected text dataset.
 
 ```{r}
 
@@ -116,7 +121,7 @@ for(i in 1:length(ngram1$Freq)) {
     {break}
 }
 
-print(paste(i, "words with", cover50, "instances cover 50% of", sum(ngram1$Freq), "words in the Corpus."))
+print(paste(i, "words with", cover50, "instances cover 50% of", sum(ngram1$Freq), "words in the text dataset."))
 
 cover90 <- 0
 for(i in 1:length(ngram1$Freq)) {
@@ -125,7 +130,7 @@ for(i in 1:length(ngram1$Freq)) {
     {break}
 }
 
-print(paste(i, "words with", cover90, "instances cover 90% of", sum(ngram1$Freq), "words in the Corpus."))
+print(paste(i, "words with", cover90, "instances cover 90% of", sum(ngram1$Freq), "words in the text dataset."))
 
 ```
 
