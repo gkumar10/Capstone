@@ -19,7 +19,8 @@ twitter_sample <- twitter[rbinom(length(twitter)*.05, length(twitter), .5)]
 txt <- c(blogs_sample, news_sample, twitter_sample)
 txt <- c(blogs, news, twitter)
 txt <- blogs
-txt <- gsub("[^[:alnum:][:space:]']", "", txt) #gsub("[^[:alnum:][:space:]'\"]", "", x)
+txt <- gsub("[^[:alnum:][:space:]']", "", txt)
+#txt <- gsub("[^[:alnum:][:space:]'\"]", "", x)
 txt <- gsub("[[:digit:]]", "", txt)
 txt <- tolower(txt)
 #txt <- unlist(strsplit(txt, " "))
@@ -30,10 +31,6 @@ txt <- tolower(txt)
 txts <- read.delim("~/Coursera/CapstoneData/preread/sample.txt", sep="\t", fill=TRUE, header=FALSE, as.is=TRUE)
 
 #create n-gram df
-#ngram1 <- NGramTokenizer(txt, Weka_control(min=1, max=1))
-#ngram1df <- data.frame(table(ngram1)); names(ngram1df) <- c("words", "freq")
-#ngram <- function(x) NGramTokenizer(x, Weka_control(min=2, max=5))
-#x <- ngram(txt)
 
 ngram2_5 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
 ngram2_5df <- data.frame(table(ngram2_5)); names(ngram2_5df) <- c("words", "freq")
@@ -103,7 +100,7 @@ txt10 <- "If this isn't the cutest thing you've ever seen, then you must be"
 txt11 <- "13. I see beauty everywhere I."
 txt12 <- "And also surprised that that quote is so famous when a few pages later we have Toad"
 txt13 <- "lol its"
-sentence <- txt1
+sentence <- txt5
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
 #func1 <- function(sentence){
