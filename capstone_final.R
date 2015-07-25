@@ -18,6 +18,7 @@ twitter_sample <- twitter[rbinom(length(twitter)*.05, length(twitter), .5)]
 #trying to do this w/o creating a corpus
 txt <- c(blogs_sample, news_sample, twitter_sample)
 txt <- c(blogs, news, twitter)
+txt <- blogs
 txt <- gsub("[^[:alnum:][:space:]']", "", txt) #gsub("[^[:alnum:][:space:]'\"]", "", x)
 txt <- gsub("[[:digit:]]", "", txt)
 txt <- tolower(txt)
@@ -36,6 +37,18 @@ txts <- read.delim("~/Coursera/CapstoneData/preread/sample.txt", sep="\t", fill=
 
 ngram2_5 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
 ngram2_5df <- data.frame(table(ngram2_5)); names(ngram2_5df) <- c("words", "freq")
+
+blogs1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
+blogs1df <- data.frame(table(blogs1)); names(blogs1) <- c("words", "freq")
+write.csv(blogs1df, "blogs1df.csv", row.names = FALSE)
+
+news1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
+news1df <- data.frame(table(news1)); names(news1) <- c("words", "freq")
+write.csv(news1df, "news1df.csv", row.names = FALSE)
+
+twitter1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
+twitter1df <- data.frame(table(twitter1)); names(twitter1) <- c("words", "freq")
+write.csv(twitter1df, "twitter1df.csv", row.names = FALSE)
 
 ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=5))
 ngram2df <- data.frame(table(ngram2)); names(ngram2df) <- c("words", "freq")
