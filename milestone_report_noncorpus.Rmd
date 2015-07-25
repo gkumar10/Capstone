@@ -49,21 +49,24 @@ Let's create the text dataset, transform it and analyze it. Transformation inclu
 
 ```{r}
 suppressMessages(suppressWarnings(require(tm)))
+suppressMessages(suppressWarnings(require(RWeka)))
 
 txt <- c(blogs, news, twitter)
 txt <- gsub("[^[:alnum:][:space:]']", "", txt)
 txt <- gsub("[[:digit:]]", "", txt)
 txt <- tolower(txt)
-#txt <- unlist(strsplit(txt, " "))
-f <- table(txt)
-f <- sort(f, decreasing=TRUE)
-barplot(head(f, 25), 
+
+ngram1 <- NGramTokenizer(txt, Weka_control(min=1, max=1, delimiters=(" .,;:?!")))
+ngram1forlater <- data.frame(table(gsub("'", "", ngram1)))
+ngram1 <- table(ngram1)
+ngram1 <- sort(ngram1, decreasing=TRUE)
+barplot(head(ngram1, 25), 
         main="Top 25 Most Frequent Words (stop words not removed)",
         xlab="word in text dataset",
         ylab="times word showed up",
         las=2,
         col="red")
-#rm(blogs, news, twitter, f)
+
 ```
 
 N-Grams
@@ -72,22 +75,15 @@ N-Grams
 Here is plot to show frequency of 2-word phrases by tokenizing using NGramTokenizer. Clearly there are a lot of stopwords.
 
 ```{r}
-suppressMessages(suppressWarnings(require(RWeka)))
 
-#txt <- c("This is the first document.", "This is the second file.", "This is the third text.", "you're great", "isn't it")
-head(txt, 100)
 ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=2, delimiters=(" .,;:")))
-head(ngram2, 25)
 ngram2 <- table(ngram2)
-head(ngram2, 25)
 ngram2 <- sort(ngram2, decreasing=TRUE)
-class(ngram2)
-head(ngram2, 25)
 barplot(head(ngram2, 25), 
         main="Top 25 Most Frequent 2-word Phrases",
         las=2,
-        col="blue", xlim=c(0,0), ylim=c(0,0))
-#rm(ngram2)
+        col="blue")
+
 ```
 
 And a plot to show frequency of 3-word phrases. Frequency of stopwords is reducing.
@@ -100,8 +96,9 @@ ngram3 <- sort(ngram3, decreasing=TRUE)
 barplot(head(ngram3, 25), 
         main="Top 25 Most Frequent 3-word Phrases",
         las=2,
-        col="green", xlim=c(0,0), ylim=c(0,0))
-#rm(ngram3)
+        col="green",
+        cex.names=0.7)
+
 ```
 
 How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
@@ -110,27 +107,25 @@ Basically we need to find out how many instances of unique words cover 50%/90% o
 
 ```{r}
 
-ngram1 <- NGramTokenizer(txt, Weka_control(min=1, max=1, delimiters=" .,;:?!"))
-ngram1 <- data.frame(table(ngram1))
-ngram1 <- ngram1[order(ngram1$Freq, decreasing = TRUE),]
+ngram1forlater <- ngram1forlater[order(ngram1forlater$Freq, decreasing = TRUE),]
 
 cover50 <- 0
-for(i in 1:length(ngram1$Freq)) {
-  cover50 <- cover50 + ngram1$Freq[i]
-  if(cover50 >= 0.5*sum(ngram1$Freq))
+for(i in 1:length(ngram1forlater$Freq)) {
+  cover50 <- cover50 + ngram1forlater$Freq[i]
+  if(cover50 >= 0.5*sum(ngram1forlater$Freq))
     {break}
 }
 
-print(paste(i, "words with", cover50, "instances cover 50% of", sum(ngram1$Freq), "words in the text dataset."))
+print(paste(i, "words with", cover50, "instances cover 50% of", sum(ngram1forlater$Freq), "words in the text dataset."))
 
 cover90 <- 0
-for(i in 1:length(ngram1$Freq)) {
-  cover90 <- cover90 + ngram1$Freq[i]
-  if(cover90 >= 0.9*sum(ngram1$Freq))
+for(i in 1:length(ngram1forlater$Freq)) {
+  cover90 <- cover90 + ngram1forlater$Freq[i]
+  if(cover90 >= 0.9*sum(ngram1forlater$Freq))
     {break}
 }
 
-print(paste(i, "words with", cover90, "instances cover 90% of", sum(ngram1$Freq), "words in the text dataset."))
+print(paste(i, "words with", cover90, "instances cover 90% of", sum(ngram1forlater$Freq), "words in the text dataset."))
 
 ```
 
@@ -138,7 +133,7 @@ Finally, no exploration is complete without showing the cloud. So here is the cl
 
 ```{r}
 suppressMessages(suppressWarnings(require(wordcloud)))
-wordcloud (words=head(ngram1$ngram1, 25), freq=head(ngram1$Freq, 25), colors=brewer.pal(8, "Dark2"), scale=c(5, 0.10))
+wordcloud (words=head(ngram1forlater$Var1, 25), freq=head(ngram1forlater$Freq, 25), colors=brewer.pal(8, "Dark2"), scale=c(5, 0.10))
 ```
 
 
