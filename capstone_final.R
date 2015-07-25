@@ -1,4 +1,4 @@
-options(java.parameters = "-Xmx4g")
+options(java.parameters = "-Xmx6g")
 require(tm)
 require(RWeka)
 require(stringr)
@@ -21,7 +21,7 @@ txt <- c(blogs, news, twitter)
 txt <- gsub("[^[:alnum:][:space:]']", "", txt) #gsub("[^[:alnum:][:space:]'\"]", "", x)
 txt <- gsub("[[:digit:]]", "", txt)
 txt <- tolower(txt)
-txt <- unlist(strsplit(txt, " "))
+#txt <- unlist(strsplit(txt, " "))
 
 #write.table(txt, "tokenized.txt", row.names=FALSE, col.names=FALSE) #write 1-word tokenized file. so i don't have to re-read and re-compute everything
 
@@ -33,7 +33,9 @@ txts <- read.delim("~/Coursera/CapstoneData/preread/sample.txt", sep="\t", fill=
 #ngram1df <- data.frame(table(ngram1)); names(ngram1df) <- c("words", "freq")
 #ngram <- function(x) NGramTokenizer(x, Weka_control(min=2, max=5))
 #x <- ngram(txt)
-ngram(txt1) <- function(x) RWeka::NGramTokenizer(x, RWeka::Weka_control(min=2, max=5))
+
+ngram2_5 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
+ngram2_5df <- data.frame(table(ngram2_5)); names(ngram2_5df) <- c("words", "freq")
 
 ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=5))
 ngram2df <- data.frame(table(ngram2)); names(ngram2df) <- c("words", "freq")
