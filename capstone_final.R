@@ -18,22 +18,22 @@ twitter_sample <- twitter[rbinom(length(twitter)*.05, length(twitter), .5)]
 #trying to do this w/o creating a corpus
 txt <- c(blogs_sample, news_sample, twitter_sample)
 txt <- c(blogs, news, twitter)
-txt <- blogs
 txt <- gsub("[^[:alnum:][:space:]']", "", txt)
 #txt <- gsub("[^[:alnum:][:space:]'\"]", "", x)
 txt <- gsub("[[:digit:]]", "", txt)
 txt <- tolower(txt)
-#txt <- unlist(strsplit(txt, " "))
-
-#write.table(txt, "tokenized.txt", row.names=FALSE, col.names=FALSE) #write 1-word tokenized file. so i don't have to re-read and re-compute everything
-
-#txt <- read.delim("~/Coursera/CapstoneData/preread/tokenized.txt", sep="\t", fill=TRUE, header=FALSE, as.is=TRUE)
-txts <- read.delim("~/Coursera/CapstoneData/preread/sample.txt", sep="\t", fill=TRUE, header=FALSE, as.is=TRUE)
+txt <- unlist(strsplit(txt, " "))
+#4269678
 
 #create n-gram df
+makengram2 <- make.ngrams(txt, ngram.size=2)
+makengram2df <- data.frame(table(makengram2))
 
-ngram2_5 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
+ngram2_5 <- NGramTokenizer(txt[1:500000], Weka_control(min=2, max=5, delimiters=(" .,;:?!"), M=50))
 ngram2_5df <- data.frame(table(ngram2_5)); names(ngram2_5df) <- c("words", "freq")
+
+ngram_master <- ngram2_df
+ngram_master <- rbind(ngram_master, ngram2_df)
 
 blogs1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
 blogs1df <- data.frame(table(blogs1)); names(blogs1) <- c("words", "freq")
@@ -47,7 +47,7 @@ twitter1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!"
 twitter1df <- data.frame(table(twitter1)); names(twitter1) <- c("words", "freq")
 write.csv(twitter1df, "twitter1df.csv", row.names = FALSE)
 
-ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=5))
+ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=5, M=25))
 ngram2df <- data.frame(table(ngram2)); names(ngram2df) <- c("words", "freq")
 ngram3 <- NGramTokenizer(txt, Weka_control(min=3, max=3))
 ngram3df <- data.frame(table(ngram3)); names(ngram3df) <- c("words", "freq")
