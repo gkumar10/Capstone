@@ -27,7 +27,12 @@ txt <- unlist(strsplit(txt, " "))
 
 #create n-gram df
 makengram2 <- make.ngrams(txt, ngram.size=2)
-makengram2df <- data.frame(table(makengram2))
+makengram2df <- data.frame(table(makengram2), stringsAsFactors = FALSE)
+names(makengram2df) <- c("ngram", "freq")
+makengram2df <- makengram2df[order(makengram2df$freq, decreasing=TRUE), ]
+makengram2df <- makengram2df[makengram2df$freq >= 25, ]
+makengram2df <- makengram2df[nchar(as.character(makengram2df$ngram)) > 3, ]
+
 
 ngram2_5 <- NGramTokenizer(txt[1:500000], Weka_control(min=2, max=5, delimiters=(" .,;:?!"), M=50))
 ngram2_5df <- data.frame(table(ngram2_5)); names(ngram2_5df) <- c("words", "freq")
