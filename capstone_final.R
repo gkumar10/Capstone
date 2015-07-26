@@ -26,13 +26,32 @@ txt <- unlist(strsplit(txt, " "))
 #4269678
 
 #create n-gram df
-makengram2 <- make.ngrams(txt, ngram.size=2)
-makengram2df <- data.frame(table(makengram2), stringsAsFactors = FALSE)
-names(makengram2df) <- c("ngram", "freq")
-makengram2df <- makengram2df[order(makengram2df$freq, decreasing=TRUE), ]
-makengram2df <- makengram2df[makengram2df$freq >= 25, ]
-makengram2df <- makengram2df[nchar(as.character(makengram2df$ngram)) > 3, ]
+ng2 <- make.ngrams(txt, ngram.size=2)
+ng2 <- gsub("^ ", "", ng2)
+ng2 <- gsub(" $", "", ng2)
+df2 <- data.frame(table(ng2), stringsAsFactors = FALSE)
+names(df2) <- c("ngram", "freq")
+df2 <- df2[order(df2$freq, decreasing=TRUE), ]
+df2 <- df2[df2$freq >= 25, ]
+df2 <- df2[nchar(as.character(df2$ngram)) > 3, ]
 
+ng3 <- make.ngrams(txt, ngram.size=3)
+ng3 <- gsub("^ ", "", ng3)
+ng3 <- gsub(" $", "", ng3)
+df3 <- data.frame(table(ng3), stringsAsFactors = FALSE)
+names(df3) <- c("ngram", "freq")
+df3 <- df3[order(df3$freq, decreasing=TRUE), ]
+df3 <- df3[df3$freq >= 25, ]
+df3 <- df3[nchar(as.character(df3$ngram)) > 3, ]
+
+ng4 <- make.ngrams(txt, ngram.size=4)
+ng4 <- gsub("^ ", "", ng4)
+ng4 <- gsub(" $", "", ng4)
+df4 <- data.frame(table(ng4), stringsAsFactors = FALSE)
+names(df4) <- c("ngram", "freq")
+df4 <- df4[order(df4$freq, decreasing=TRUE), ]
+df4 <- df4[df4$freq >= 25, ]
+df4 <- df4[nchar(as.character(df4$ngram)) > 3, ]
 
 ngram2_5 <- NGramTokenizer(txt[1:500000], Weka_control(min=2, max=5, delimiters=(" .,;:?!"), M=50))
 ngram2_5df <- data.frame(table(ngram2_5)); names(ngram2_5df) <- c("words", "freq")
