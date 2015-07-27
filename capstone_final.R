@@ -33,11 +33,19 @@ txt7 <- "Ohhhhh #PointBreak is on tomorrow. Love that film and haven't seen it i
 txt8 <- "After the ice bucket challenge Louis will push his long wet hair out of his eyes with his little"
 txt9 <- "Be grateful for the good times and keep the faith during the"
 txt10 <- "If this isn't the cutest thing you've ever seen, then you must be"
-txt11 <- "13. I see beauty everywhere I."
-txt12 <- "And also surprised that that quote is so famous when a few pages later we have Toad"
-txt13 <- "lol its"
 
-sentence <- "zyrtec"
+txt11 <- "When you breathe, I want to be the air for you. I'll be there for you, I'd live and I'd"
+txt12 <- "Guy at my table's wife got up to go to the bathroom and I asked about dessert and he started telling me about his"
+txt13 <- "I'd give anything to see arctic monkeys this"
+txt14 <- "Talking to your mom has the same effect as a hug and helps reduce your"
+txt15 <- "When you were in Holland you were like 1 inch away from me but you hadn't time to take a"
+txt16 <- "I'd just like all of these questions answered, a presentation of evidence, and a jury to settle the"
+txt17 <- "I can't deal with unsymetrical things. I can't even hold an uneven number of bags of groceries in each"
+txt18 <- "Every inch of you is perfect from the bottom to the"
+txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
+txt20 <- "I like how the same people are in almost all of Adam Sandler's"
+
+sentence <- txt19
 
 func1(sentence)
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
