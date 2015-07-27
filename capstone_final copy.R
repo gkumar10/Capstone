@@ -1,8 +1,6 @@
-options(java.parameters = "-Xmx6g")
 require(tm)
 require(RWeka)
 require(stringr)
-require(stylo)
 setwd("~/Coursera/Capstone")
 
 #read in complete dataset. reads as character class
@@ -18,60 +16,20 @@ twitter_sample <- twitter[rbinom(length(twitter)*.05, length(twitter), .5)]
 #trying to do this w/o creating a corpus
 txt <- c(blogs_sample, news_sample, twitter_sample)
 txt <- c(blogs, news, twitter)
-txt <- gsub("[^[:alnum:][:space:]']", "", txt)
-#txt <- gsub("[^[:alnum:][:space:]'\"]", "", x)
+txt <- gsub("[[:punct:]]", "", txt)
 txt <- gsub("[[:digit:]]", "", txt)
 txt <- tolower(txt)
 txt <- unlist(strsplit(txt, " "))
-#4269678
+
+#write.table(txt, "tokenized.txt", row.names=FALSE, col.names=FALSE) #write 1-word tokenized file. so i don't have to re-read and re-compute everything
+
+#txt <- read.delim("~/Coursera/CapstoneData/preread/tokenized.txt", sep="\t", fill=TRUE, header=FALSE, as.is=TRUE)
+txts <- read.delim("~/Coursera/CapstoneData/preread/sample.txt", sep="\t", fill=TRUE, header=FALSE, as.is=TRUE)
 
 #create n-gram df
-ng2 <- make.ngrams(txt, ngram.size=2)
-ng2 <- gsub("^ ", "", ng2)
-ng2 <- gsub(" $", "", ng2)
-df2 <- data.frame(table(ng2), stringsAsFactors = FALSE)
-names(df2) <- c("ngram", "freq")
-df2 <- df2[order(df2$freq, decreasing=TRUE), ]
-df2 <- df2[df2$freq >= 25, ]
-df2 <- df2[nchar(as.character(df2$ngram)) > 3, ]
-
-ng3 <- make.ngrams(txt, ngram.size=3)
-ng3 <- gsub("^ ", "", ng3)
-ng3 <- gsub(" $", "", ng3)
-df3 <- data.frame(table(ng3), stringsAsFactors = FALSE)
-names(df3) <- c("ngram", "freq")
-df3 <- df3[order(df3$freq, decreasing=TRUE), ]
-df3 <- df3[df3$freq >= 25, ]
-df3 <- df3[nchar(as.character(df3$ngram)) > 3, ]
-
-ng4 <- make.ngrams(txt, ngram.size=4)
-ng4 <- gsub("^ ", "", ng4)
-ng4 <- gsub(" $", "", ng4)
-df4 <- data.frame(table(ng4), stringsAsFactors = FALSE)
-names(df4) <- c("ngram", "freq")
-df4 <- df4[order(df4$freq, decreasing=TRUE), ]
-df4 <- df4[df4$freq >= 25, ]
-df4 <- df4[nchar(as.character(df4$ngram)) > 3, ]
-
-ngram2_5 <- NGramTokenizer(txt[1:500000], Weka_control(min=2, max=5, delimiters=(" .,;:?!"), M=50))
-ngram2_5df <- data.frame(table(ngram2_5)); names(ngram2_5df) <- c("words", "freq")
-
-ngram_master <- ngram2_df
-ngram_master <- rbind(ngram_master, ngram2_df)
-
-blogs1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
-blogs1df <- data.frame(table(blogs1)); names(blogs1) <- c("words", "freq")
-write.csv(blogs1df, "blogs1df.csv", row.names = FALSE)
-
-news1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
-news1df <- data.frame(table(news1)); names(news1) <- c("words", "freq")
-write.csv(news1df, "news1df.csv", row.names = FALSE)
-
-twitter1 <- NGramTokenizer(txt, Weka_control(min=2, max=5, delimiters=(" .,;:?!")))
-twitter1df <- data.frame(table(twitter1)); names(twitter1) <- c("words", "freq")
-write.csv(twitter1df, "twitter1df.csv", row.names = FALSE)
-
-ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=5, M=25))
+#ngram1 <- NGramTokenizer(txt, Weka_control(min=1, max=1))
+#ngram1df <- data.frame(table(ngram1)); names(ngram1df) <- c("words", "freq")
+ngram2 <- NGramTokenizer(txt, Weka_control(min=2, max=5))
 ngram2df <- data.frame(table(ngram2)); names(ngram2df) <- c("words", "freq")
 ngram3 <- NGramTokenizer(txt, Weka_control(min=3, max=3))
 ngram3df <- data.frame(table(ngram3)); names(ngram3df) <- c("words", "freq")
@@ -124,7 +82,7 @@ txt10 <- "If this isn't the cutest thing you've ever seen, then you must be"
 txt11 <- "13. I see beauty everywhere I."
 txt12 <- "And also surprised that that quote is so famous when a few pages later we have Toad"
 txt13 <- "lol its"
-sentence <- txt5
+sentence <- txt1
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
 #func1 <- function(sentence){
