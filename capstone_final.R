@@ -17,6 +17,8 @@ save(txt, file="~/Coursera/CapstoneData/enUS.rdata")
 load("~/Coursera/CapstoneData/ngram1df.rdata")
 load("~/Coursera/CapstoneData/ngram2df.rdata")
 load("~/Coursera/CapstoneData/ngram3df.rdata")
+load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
+load("~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
 
 #sapply(strsplit(str1, " "), length)
@@ -46,8 +48,8 @@ txt19 <- "I’m thankful my childhood was filled with imagination and bruises fr
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
 sentence <- txt19
-
 func1(sentence)
+
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
 func1 <- function(sentence)
 {
@@ -69,6 +71,13 @@ func1 <- function(sentence)
     } else {
 #      print("no 2 word match in 3-gram df")
     }
+
+  i3n <- df3n[grep(paste("^", last2, " ", sep=""), df3n$ngram),] #returns rows with similar characters
+  if (nrow(i3n) > 0) {
+    i3n <- i3n[order(i3n$freq, decreasing = TRUE),] #order using frequency
+  } else {
+    #      print("no 2 word match in 3-gram df")
+  }
   
   i2 <- df2[grep(paste("^", last1, " ", sep=""), df2$ngram),] #returns rows with similar characters
     if (nrow(i2) > 0) {
@@ -76,13 +85,20 @@ func1 <- function(sentence)
     } else {
 #      print("no match to first word in 2-gram df")
     }
+
+  i2n <- df2n[grep(paste("^", last1, " ", sep=""), df2n$ngram),] #returns rows with similar characters
+  if (nrow(i2n) > 0) {
+    i2n <- i2n[order(i2n$freq, decreasing = TRUE),] #order them using frequency
+  } else {
+    #      print("no match to first word in 2-gram df")
+  }
   
-  i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),])
+  i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),], i3n[order(i3n$freq, decreasing=TRUE),], i2n[order(i2n$freq, decreasing=TRUE),])
 
   if (nrow(i)==0) {
     print(head(df1$ngram, c(2:4)))
   } else {
     i$nextword <- word(i$ngram, -1)
-    print(head(unique(i$nextword), 4))
+    print(head(unique(i$nextword), 10))
   }
 }

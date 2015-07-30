@@ -15,17 +15,22 @@ setwd("~/Coursera/Capstone")
 
 save(df1, file="~/Coursera/CapstoneData/ngram1df.rdata")
 save(df2, file="~/Coursera/CapstoneData/ngram2df.rdata")
+save(df2n, file="~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 save(df3, file="~/Coursera/CapstoneData/ngram3df.rdata")
+save(df3n, file="~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 save(txt, file="~/Coursera/CapstoneData/enUS.rdata")
+save(txtn, file="~/Coursera/CapstoneData/enUSNoStopWords.rdata")
 
 #load rdata file
 load("~/Coursera/CapstoneData/ngram1df.rdata")
 load("~/Coursera/CapstoneData/ngram2df.rdata")
+load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/ngram3df.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
+load("~/Coursera/CapstoneData/enUSNoStopWords.rdata")
 
 sapply(strsplit(str1, " "), length)
-df3$ngram <- sapply(df3$ngram, as.character)
+df3n$ngram <- sapply(df3n$ngram, as.character)
 
 #create sample data set for faster processing
 blogs_sample <- blogs[rbinom(length(blogs)*.01, length(blogs), .5)]
@@ -41,7 +46,7 @@ txt <- tolower(txt)
 txt <- unlist(strsplit(txt, " "))
 
 #create n-gram df
-ng2 <- make.ngrams(txt, ngram.size=2)
+ng2 <- make.ngrams(txt1, ngram.size=2)
 ng2 <- gsub("^ ", "", ng2)
 ng2 <- gsub(" $", "", ng2)
 df2 <- data.frame(table(ng2), stringsAsFactors = FALSE)
@@ -50,14 +55,16 @@ df2 <- df2[order(df2$freq, decreasing=TRUE), ]
 df2 <- df2[df2$freq >= 25, ]
 df2 <- df2[nchar(as.character(df2$ngram)) > 3, ]
 
-ng3 <- make.ngrams(txt, ngram.size=3)
+ng3 <- make.ngrams(txtn, ngram.size=3)
 ng3 <- gsub("^ ", "", ng3)
 ng3 <- gsub(" $", "", ng3)
 df3 <- data.frame(table(ng3), stringsAsFactors = FALSE)
-names(df3) <- c("ngram", "freq")
-df3 <- df3[order(df3$freq, decreasing=TRUE), ]
-df3 <- df3[df3$freq >= 25, ]
-df3 <- df3[nchar(as.character(df3$ngram)) > 3, ]
+rm(ng3)
+names(df3) <- c("x", "freq")
+df3n$ngram <- sapply(df3n$x, as.character)
+df3n <- df3n[order(df3n$freq, decreasing=TRUE), ]
+df3n <- df3[df3$freq >= 25, ]
+df3n <- df3n[nchar(df3n$ngram) > 3, ]
 
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
