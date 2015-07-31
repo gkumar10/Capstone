@@ -9,9 +9,9 @@ require(openNLP)
 setwd("~/Coursera/Capstone")
 
 #read in complete dataset. reads as character class
-# blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE)
-# news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE)
-# twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE)
+blogs <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.blogs.txt", skipNul=TRUE)
+news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=TRUE)
+twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE)
 
 save(df1, file="~/Coursera/CapstoneData/ngram1df.rdata")
 save(df2, file="~/Coursera/CapstoneData/ngram2df.rdata")

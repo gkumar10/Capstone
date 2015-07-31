@@ -17,8 +17,8 @@ save(txt, file="~/Coursera/CapstoneData/enUS.rdata")
 load("~/Coursera/CapstoneData/ngram1df.rdata")
 load("~/Coursera/CapstoneData/ngram2df.rdata")
 load("~/Coursera/CapstoneData/ngram3df.rdata")
-load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
-load("~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
+#load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
+#load("~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
 
 df1$whichngram <- c("unigram")
@@ -43,17 +43,17 @@ txt9 <- "Be grateful for the good times and keep the faith during the"
 txt10 <- "If this isn't the cutest thing you've ever seen, then you must be"
 
 txt11 <- "When you breathe, I want to be the air for you. I'll be there for you, I'd live and I'd"
-txt12 <- "Guy at my table's wife got up to go to the bathroom and I asked about dessert and he started telling me about his"
-txt13 <- "I'd give anything to see arctic monkeys this"
+txt12 <- "xxxGuy at my table's wife got up to go to the bathroom and I asked about dessert and he started telling me about his"
+txt13 <- "xxxI'd give anything to see arctic monkeys this"
 txt14 <- "Talking to your mom has the same effect as a hug and helps reduce your"
-txt15 <- "When you were in Holland you were like 1 inch away from me but you hadn't time to take a"
-txt16 <- "I'd just like all of these questions answered, a presentation of evidence, and a jury to settle the"
+txt15 <- "xxxWhen you were in Holland you were like 1 inch away from me but you hadn't time to take a"
+txt16 <- "xxxI'd just like all of these questions answered, a presentation of evidence, and a jury to settle the"
 txt17 <- "I can't deal with unsymetrical things. I can't even hold an uneven number of bags of groceries in each"
 txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- txt16
+sentence <- txt12
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
@@ -74,32 +74,30 @@ func1 <- function(sentence)
   i3 <- df3[grep(paste("^", last2, " ", sep=""), df3$ngram),] #returns rows with similar characters
     if (nrow(i3) > 0) {
       i3 <- i3[order(i3$freq, decreasing = TRUE),] #order using frequency
-    } else {
-#      print("no 2 word match in 3-gram df")
+      i3$prob <- i3$freq/sum(i3$freq)
     }
 
-  i3n <- df3n[grep(paste("^", last2, " ", sep=""), df3n$ngram),] #returns rows with similar characters
-  if (nrow(i3n) > 0) {
-    i3n <- i3n[order(i3n$freq, decreasing = TRUE),] #order using frequency
-  } else {
-    #      print("no 2 word match in 3-gram df")
-  }
+#   i3n <- df3n[grep(paste("^", last2, " ", sep=""), df3n$ngram),] #returns rows with similar characters
+#   if (nrow(i3n) > 0) {
+#     i3n <- i3n[order(i3n$freq, decreasing = TRUE),] #order using frequency
+#     i3n$prob <- i3n$freq/sum(i3n$freq)
+#   }
   
   i2 <- df2[grep(paste("^", last1, " ", sep=""), df2$ngram),] #returns rows with similar characters
     if (nrow(i2) > 0) {
       i2 <- i2[order(i2$freq, decreasing = TRUE),] #order them using frequency
-    } else {
-#      print("no match to first word in 2-gram df")
+      i2$prob <- i2$freq/sum(i2$freq)
     }
 
-  i2n <- df2n[grep(paste("^", last1, " ", sep=""), df2n$ngram),] #returns rows with similar characters
-  if (nrow(i2n) > 0) {
-    i2n <- i2n[order(i2n$freq, decreasing = TRUE),] #order them using frequency
-  } else {
-    #      print("no match to first word in 2-gram df")
-  }
+#   i2n <- df2n[grep(paste("^", last1, " ", sep=""), df2n$ngram),] #returns rows with similar characters
+#   if (nrow(i2n) > 0) {
+#     i2n <- i2n[order(i2n$freq, decreasing = TRUE),] #order them using frequency
+#     i2n$prob <- i2n$freq/sum(i2n$freq)
+#   }
   
-  i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),], i3n[order(i3n$freq, decreasing=TRUE),], i2n[order(i2n$freq, decreasing=TRUE),])
+# i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),], i3n[order(i3n$freq, decreasing=TRUE),], i2n[order(i2n$freq, decreasing=TRUE),])
+  i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),])
+  i <- aggregate(c(i$freq, i$prob) ~ i$ngram, data=i, FUN="sum")
 
   if (nrow(i)==0) {
     print(head(df1$ngram, c(2:4)))
