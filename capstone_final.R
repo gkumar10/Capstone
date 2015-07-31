@@ -24,6 +24,8 @@ load("~/Coursera/CapstoneData/enUS.rdata")
 df1$whichngram <- c("unigram")
 df2$whichngram <- c("bigram")
 df3$whichngram <- c("trigram")
+df2n$whichngram <- c("bigram")
+df3n$whichngram <- c("trigram")
 
 #sapply(strsplit(str1, " "), length)
 #df3$ngram <- sapply(df3$ngram, as.character)
@@ -51,7 +53,7 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- txt19
+sentence <- txt16
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
