@@ -21,6 +21,10 @@ load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
 
+df1$whichngram <- c("unigram")
+df2$whichngram <- c("bigram")
+df3$whichngram <- c("trigram")
+
 #sapply(strsplit(str1, " "), length)
 #df3$ngram <- sapply(df3$ngram, as.character)
 
