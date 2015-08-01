@@ -53,7 +53,7 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- txt12
+sentence <- "boom shak lak"
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
@@ -97,7 +97,9 @@ func1 <- function(sentence)
   
 # i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),], i3n[order(i3n$freq, decreasing=TRUE),], i2n[order(i2n$freq, decreasing=TRUE),])
   i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),])
-  i <- aggregate(c(i$freq, i$prob) ~ i$ngram, data=i, FUN="sum")
+  i <- i[order(i$prob, decreasing=TRUE),]
+
+# i <- aggregate(c(i$freq, i$prob) ~ i$ngram, data=i, FUN="sum")
 
   if (nrow(i)==0) {
     print(head(df1$ngram, c(2:4)))
