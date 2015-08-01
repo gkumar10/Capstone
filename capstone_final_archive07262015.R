@@ -18,7 +18,7 @@ save(df2, file="~/Coursera/CapstoneData/ngram2df.rdata")
 save(df2n, file="~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 save(df3, file="~/Coursera/CapstoneData/ngram3df.rdata")
 save(df3n, file="~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
-save(txt, file="~/Coursera/CapstoneData/enUS.rdata")
+save(txtf, file="~/Coursera/CapstoneData/enUSFullLines.rdata")
 save(txtn, file="~/Coursera/CapstoneData/enUSNoStopWords.rdata")
 
 #load rdata file
@@ -42,7 +42,7 @@ txt <- c(blogs_sample, news_sample, twitter_sample)
 txt <- c(blogs, news, twitter)
 txt <- gsub("[^[:alnum:][:space:]']", "", txt)
 txt <- gsub("[[:digit:]]", "", txt)
-txt <- tolower(txt)
+txtf <- tolower(txt)
 txt <- unlist(strsplit(txt, " "))
 
 #create n-gram df
