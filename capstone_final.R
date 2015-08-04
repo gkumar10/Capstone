@@ -35,6 +35,8 @@ for(n in 1:nrow(df3)) {
   z <- rbind(z, as.integer(length(grep(paste(df3$last1[n], "$", sep=""), df3$ngram[a]))))
 }
 
+
+
 df1$whichngram <- c("unigram")
 df2$whichngram <- c("bigram")
 df3$whichngram <- c("trigram")
@@ -108,7 +110,6 @@ func1 <- function(sentence)
 #     i2n <- i2n[order(i2n$freq, decreasing = TRUE),] #order them using frequency
 #     i2n$prob <- i2n$freq/sum(i2n$freq)
 #   }
-  
 # i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),], i3n[order(i3n$freq, decreasing=TRUE),], i2n[order(i2n$freq, decreasing=TRUE),])
   i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),])
   i <- i[order(i$prob, decreasing=TRUE),]
