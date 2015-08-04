@@ -21,6 +21,20 @@ load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
 
+#assign probability
+df3$first2 <- word(df3$ngram, start=1, end=2)
+df3$last1 <- word(df3$ngram, -1)
+#df3$first2count <- length(grep(paste("^", df3$first2[n], sep=""), df3$ngram))
+df3$first2count <- length(grepl(x, df3$ngram))
+
+y <- data.frame(ncol=0)
+z <- data.frame(ncol=0)
+for(n in 1:nrow(df3)) {
+  a <- grep(paste("^", df3$first2[n], sep=""), df3$ngram)
+  y <- rbind(y, as.integer(length(a)))
+  z <- rbind(z, as.integer(length(grep(paste(df3$last1[n], "$", sep=""), df3$ngram[a]))))
+}
+
 df1$whichngram <- c("unigram")
 df2$whichngram <- c("bigram")
 df3$whichngram <- c("trigram")
