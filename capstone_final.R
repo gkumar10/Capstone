@@ -105,5 +105,6 @@ kbo <- function(discount) {
   } else {
     i3$kbo <- i3$prob - discount
   }
+  i3$kbo <- sapply(i3$kbo < 0, i3$kbo==0)
   missingmass <- 1 - sum(i3$kbo)
 }
