@@ -49,7 +49,7 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- "barra"
+sentence <- "I am the"
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
@@ -67,10 +67,9 @@ func1 <- function(sentence)
   last1 <- paste(as.character(sapply(strsplit(sentence, " "), tail, 1)), collapse=" ") #returns a character vector of length 1.
   
   i3 <- df3[grep(paste("^", last2, " ", sep=""), df3$ngram),] #returns rows with similar characters
-  if ((nrow(i3) > 0) & (sapply(strsplit(last1, " "), length) > 1)) {
+  if ((nrow(i3) > 0) & (sapply(strsplit(last2, " "), length) > 1)) {
     i3 <- i3[order(i3$freq, decreasing = TRUE),] #order using frequency
     i3$prob <- i3$freq/sum(i3$freq)
-    #i3$prob1 <- (i3$freq-5)/sum(i3$freq)
   } else {
     i3 <- data.frame(ngram=0, freq=0, prob=0)
     i3 <- i3[FALSE,]
@@ -97,4 +96,14 @@ func1 <- function(sentence)
     print(tail(unique(i$nextword), 4))
   }
   rm(i, i2, i3)
+}
+
+discount <- 0.1
+kbo <- function(discount) {
+  if ((i3$prob - discount) < 0) {
+    i3$kbo == 0  
+  } else {
+    i3$kbo <- i3$prob - discount
+  }
+  missingmass <- 1 - sum(i3$kbo)
 }
