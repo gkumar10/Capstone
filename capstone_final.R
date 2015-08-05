@@ -49,7 +49,7 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- txt1
+sentence <- "ipsum"
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
@@ -63,45 +63,38 @@ func1 <- function(sentence)
   sentence <- gsub("^ ", "", sentence) #remove blank space in beginning
   sentence <- gsub(" $", "", sentence) #remove blank space in end
   
-# last3 <- paste(as.character(sapply(strsplit(sentence, " "), tail, 3)), collapse=" ") #returns a character vector of length 3.
   last2 <- paste(as.character(sapply(strsplit(sentence, " "), tail, 2)), collapse=" ") #returns a character vector of length 2.
   last1 <- paste(as.character(sapply(strsplit(sentence, " "), tail, 1)), collapse=" ") #returns a character vector of length 1.
   
   i3 <- df3[grep(paste("^", last2, " ", sep=""), df3$ngram),] #returns rows with similar characters
-    if (nrow(i3) > 0) {
-      i3 <- i3[order(i3$freq, decreasing = TRUE),] #order using frequency
-      i3$prob <- i3$freq/sum(i3$freq)
-      i3$prob1 <- (i3$freq-5)/sum(i3$freq)
-    }
+  if ((nrow(i3) > 0) & (sapply(strsplit(last1, " "), length) > 1)) {
+    i3 <- i3[order(i3$freq, decreasing = TRUE),] #order using frequency
+    i3$prob <- i3$freq/sum(i3$freq)
+    #i3$prob1 <- (i3$freq-5)/sum(i3$freq)
+  } else {
+    i3 <- data.frame(ngram=0, freq=0, prob=0)
+    i3 <- i3[FALSE,]
+  }
 
-#   i3n <- df3n[grep(paste("^", last2, " ", sep=""), df3n$ngram),] #returns rows with similar characters
-#   if (nrow(i3n) > 0) {
-#     i3n <- i3n[order(i3n$freq, decreasing = TRUE),] #order using frequency
-#     i3n$prob <- i3n$freq/sum(i3n$freq)
-#   }
-  
+
   i2 <- df2[grep(paste("^", last1, " ", sep=""), df2$ngram),] #returns rows with similar characters
-    if (nrow(i2) > 0) {
-      i2 <- i2[order(i2$freq, decreasing = TRUE),] #order them using frequency
-      i2$prob <- i2$freq/sum(i2$freq)
-    }
+  if (nrow(i2) > 0) {
+    i2 <- i2[order(i2$freq, decreasing = TRUE),] #order them using frequency
+    i2$prob <- i2$freq/sum(i2$freq)
+  } else {
+    i2 <- data.frame(ngram=0, freq=0, prob=0)
+    i2 <- i2[FALSE,]
+  }
 
-#   i2n <- df2n[grep(paste("^", last1, " ", sep=""), df2n$ngram),] #returns rows with similar characters
-#   if (nrow(i2n) > 0) {
-#     i2n <- i2n[order(i2n$freq, decreasing = TRUE),] #order them using frequency
-#     i2n$prob <- i2n$freq/sum(i2n$freq)
-#   }
-# i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),], i3n[order(i3n$freq, decreasing=TRUE),], i2n[order(i2n$freq, decreasing=TRUE),])
   i <- rbind(i3[order(i3$freq, decreasing=TRUE),], i2[order(i2$freq, decreasing=TRUE),])
   i <- i[order(i$prob, decreasing=TRUE),]
 
-# i <- aggregate(c(i$freq, i$prob) ~ i$ngram, data=i, FUN="sum")
-
   if (nrow(i)==0) {
-    print(head(df1$ngram, c(2:4)))
+    print(head(df1$ngram, 4))
   } else {
     i$nextword <- word(i$ngram, -1)
-    print(head(unique(i$nextword), 50))
-    print(tail(unique(i$nextword), 50))
+    print(head(unique(i$nextword), 4))
+    print(tail(unique(i$nextword), 4))
   }
+  rm(i, i2, i3)
 }
