@@ -49,13 +49,12 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- "I am the"
+sentence <- "the presidential"
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
 func1 <- function(sentence)
 {
-
   #get last 1-3 words = n-1 number of ngrams available. 5 grams are available.
   sentence <- gsub("[[:punct:]]", "", sentence)
   sentence <- gsub("[[:digit:]]", "", sentence)
@@ -89,6 +88,7 @@ func1 <- function(sentence)
   i <- i[order(i$prob, decreasing=TRUE),]
 
   if (nrow(i)==0) {
+    df1$prob <- df1$freq/sum(df1$freq)
     print(df1$ngram[sample(nrow(df1), 4)])
   } else {
     i$nextword <- word(i$ngram, -1)
@@ -98,13 +98,9 @@ func1 <- function(sentence)
   rm(i, i2, i3)
 }
 
-discount <- 0.1
+discount <- 0.2
 kbo <- function(discount) {
-  if ((i3$prob - discount) < 0) {
-    i3$kbo == 0  
-  } else {
-    i3$kbo <- i3$prob - discount
-  }
-  i3$kbo <- sapply(i3$kbo < 0, i3$kbo==0)
-  missingmass <- 1 - sum(i3$kbo)
+  i3$kbo <- ifelse((i3$freq - discount) > 0, (i3$freq - discount), 0)
+  missingmass <- 1 - sum(i3$kbo)/sum(i3$freq)
+  df1$kbo <- missingmass * df1$prob/(nrow(df1) + df1$prob)
 }
