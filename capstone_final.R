@@ -89,7 +89,8 @@ func1 <- function(sentence)
 
   if (nrow(i)==0) {
     df1$prob <- df1$freq/sum(df1$freq)
-    print(df1$ngram[sample(nrow(df1), 4)])
+    kbo(0.2)
+#    print(df1$ngram[sample(nrow(df1), 4)])
   } else {
     i$nextword <- word(i$ngram, -1)
     print(head(unique(i$nextword), 4))
@@ -98,9 +99,19 @@ func1 <- function(sentence)
   rm(i, i2, i3)
 }
 
+#Katz Back Off
 discount <- 0.2
 kbo <- function(discount) {
-  i3$kbo <- ifelse((i3$freq - discount) > 0, (i3$freq - discount), 0)
-  missingmass <- 1 - sum(i3$kbo)/sum(i3$freq)
+  i2$kbo <- ifelse((i2$freq - discount)/sum(i2$freq) > 0, (i2$freq - discount)/sum(i2$freq), 0)
+  missingmass <- 1 - sum(i2$kbo)
   df1$kbo <- missingmass * df1$prob/(nrow(df1) + df1$prob)
+  df1 <- df1[order(df1$kbo, decreasing=TRUE),]
+  print(head(df1$ngram, 4))
 }
+
+#Add-One Smoothing http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf (slide 8,9)
+addone <- function(){
+  prob <- (1 + nrow(i3))/(nrow(df1) + df1$freq[grep(paste("^", word(sentence, 1), "$", sep=""), df1$ngram)])
+}
+
+#Good-Turing Smoothing http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf (slide 11-14)
