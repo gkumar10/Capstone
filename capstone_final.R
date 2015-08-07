@@ -122,9 +122,9 @@ addone <- function(lastword){
 #Good-Turing Smoothing http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf (slide 11-14)
 goodturing <- function(lastword){
   r <- df1$freq[grep(paste("^", lastword, "$", sep=""), df1$ngram)]
-  nr1 <- ifelse(nrow(df1[df1$freq==(r+1),]) == 0, (2.3 - (0.17 * r)), nrow(df1[df1$freq==(r+1),]))
-  rstar <- (r + 1) * nrow(df1[df1$freq==(r+1),])/nrow(df1[df1$freq==r,])
-  
-  goodturingprob <- rstar/nrow(df1)
+  nr1 <- ifelse(nrow(df1[df1$freq==(r+1),]) == 0, (2.3 + (-0.17 * r)), nrow(df1[df1$freq==(r+1),]))
+  rstar <- (r + 1) * nr1/nrow(df1[df1$freq==r,])
+  rstar <- ifelse(rstar >=0, rstar, rstar * -1)
+  goodturingprob <- rstar/sum(df1$freq)
   print(goodturingprob)
 }
