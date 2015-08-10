@@ -26,7 +26,7 @@ shinyUI(
       
       #show output
       h2("Choices for next word:"),
-      uiOutput("distancetext")
+      uiOutput("nextword")
       
     )
   )
