@@ -20,14 +20,18 @@ save(df3, file="~/Coursera/CapstoneData/ngram3df.rdata")
 save(df3n, file="~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 save(txtf, file="~/Coursera/CapstoneData/enUSFullLines.rdata")
 save(txtn, file="~/Coursera/CapstoneData/enUSNoStopWords.rdata")
+save(txt, file="~/Coursera/CapstoneData/enUSAllWords.rdata")
 
 #load rdata file
 load("~/Coursera/CapstoneData/ngram1df.rdata")
 load("~/Coursera/CapstoneData/ngram2df.rdata")
-load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/ngram3df.rdata")
+load("~/Coursera/CapstoneData/enUSAllWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
+load("~/Coursera/CapstoneData/enUSFullLines.rdata")
+load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/enUSNoStopWords.rdata")
+load("~/Coursera/CapstoneData/enUSFullLines.rdata")
 
 sapply(strsplit(str1, " "), length)
 df3n$ngram <- sapply(df3n$ngram, as.character)
@@ -46,7 +50,7 @@ txtf <- tolower(txt)
 txt <- unlist(strsplit(txt, " "))
 
 #create n-gram df
-ng2 <- make.ngrams(txt1, ngram.size=2)
+ng2 <- make.ngrams(txt, ngram.size=2)
 ng2 <- gsub("^ ", "", ng2)
 ng2 <- gsub(" $", "", ng2)
 df2 <- data.frame(table(ng2), stringsAsFactors = FALSE)
@@ -55,7 +59,7 @@ df2 <- df2[order(df2$freq, decreasing=TRUE), ]
 df2 <- df2[df2$freq >= 25, ]
 df2 <- df2[nchar(as.character(df2$ngram)) > 3, ]
 
-ng3 <- make.ngrams(txtn, ngram.size=3)
+ng3 <- make.ngrams(txt, ngram.size=3)
 ng3 <- gsub("^ ", "", ng3)
 ng3 <- gsub(" $", "", ng3)
 df3 <- data.frame(table(ng3), stringsAsFactors = FALSE)
