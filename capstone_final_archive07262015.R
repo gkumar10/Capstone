@@ -63,9 +63,8 @@ ng3 <- make.ngrams(txt, ngram.size=3)
 ng3 <- gsub("^ ", "", ng3)
 ng3 <- gsub(" $", "", ng3)
 df3 <- data.frame(table(ng3), stringsAsFactors = FALSE)
-rm(ng3)
-names(df3) <- c("x", "freq")
-df3n$ngram <- sapply(df3n$x, as.character)
+names(df3) <- c("ngram", "freq")
+df3n$ngram <- sapply(df3n$ngram, as.character)
 df3n <- df3n[order(df3n$freq, decreasing=TRUE), ]
 df3n <- df3[df3$freq >= 25, ]
 df3n <- df3n[nchar(df3n$ngram) > 3, ]
