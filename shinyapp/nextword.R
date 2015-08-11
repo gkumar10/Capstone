@@ -1,13 +1,13 @@
 if (!exists("df1")) {
-  load("~/Coursera/CapstoneData/ngram1df.rdata")
+  load("ngram1df.rdata")
 }
 
 if (!exists("df2")) {
-  load("~/Coursera/CapstoneData/ngram2df.rdata")
+  load("ngram2df.rdata")
 }
 
 if (!exists("df3")) {
-  load("~/Coursera/CapstoneData/ngram3df.rdata")
+  load("ngram3df.rdata")
 }
 
 if (!exists("strings")) {
