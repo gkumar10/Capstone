@@ -25,6 +25,7 @@ save(txt, file="~/Coursera/CapstoneData/enUSAllWords.rdata")
 #load rdata file
 load("~/Coursera/CapstoneData/ngram1df.rdata")
 load("~/Coursera/CapstoneData/ngram2df.rdata")
+load("~/Coursera/CapstoneData/ngram2dfAllWords.rdata")
 load("~/Coursera/CapstoneData/ngram3df.rdata")
 load("~/Coursera/CapstoneData/enUSAllWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
@@ -64,10 +65,10 @@ ng3 <- gsub("^ ", "", ng3)
 ng3 <- gsub(" $", "", ng3)
 df3 <- data.frame(table(ng3), stringsAsFactors = FALSE)
 names(df3) <- c("ngram", "freq")
-df3n$ngram <- sapply(df3n$ngram, as.character)
-df3n <- df3n[order(df3n$freq, decreasing=TRUE), ]
-df3n <- df3[df3$freq >= 25, ]
-df3n <- df3n[nchar(df3n$ngram) > 3, ]
+df3$ngram <- sapply(df3$ngram, as.character)
+df3 <- df3[order(df3$freq, decreasing=TRUE), ]
+df3 <- df3[df3$freq >= 25, ]
+df3 <- df3[nchar(df3$ngram) > 3, ]
 
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
