@@ -7,7 +7,7 @@ shinyServer(
     #define output text
     output$nextword <- renderUI({
       if (input$sentence == "") {
-        HTML('Please type at least 2 words in the text box.')
+        HTML('Please type at least 1 word in the text box.')
       } else
         HTML(nextword(input$sentence)[1], '<br>',
              nextword(input$sentence)[2], '<br>',

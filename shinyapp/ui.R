@@ -3,7 +3,7 @@ library(shiny)
 #shiny app for next word prediction
 #coursera data science capstone project
 
-text1 <- "Type a phrase with at least 2 words"
+text1 <- "Type a phrase with at least 1 word"
 text2 <- "Click 'Predict Next Word' button."
 
 shinyUI(
