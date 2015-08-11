@@ -2,7 +2,7 @@ library(shiny)
 
 #load datasets
 
-if !(exists("df1") & exists("df2") & exists("df3")) {
+if (as.logical((exists("df1") & exists("df2") & exists("df3"))) == "FALSE") {
 
   load("~/Coursera/CapstoneData/ngram1df.rdata")
   load("~/Coursera/CapstoneData/ngram2df.rdata")
@@ -15,8 +15,8 @@ shinyServer(
   function(input, output) {
     #define output text
     output$nextword <- renderUI({
-      HTML('You entered: ', input$sentence),
-      nextword(input$sentencd)
+      HTML('You entered: ', input$sentence)
+      print(nextword(input$sentence))
    })
 })
 
@@ -56,18 +56,42 @@ nextword <- function(sentence)
   
   if (nrow(i)==0) {
     df1$prob <- df1$freq/sum(df1$freq)
-    print(df1$ngram[sample(nrow(df1), 4)])
+    kbo(0.2)
+    addone(last1)
+    goodturing(last1)
+    #    print(df1$ngram[sample(nrow(df1), 4)])
   } else {
     i$nextword <- word(i$ngram, -1)
     print(head(unique(i$nextword), 4))
-#   print(tail(unique(i$nextword), 4))
+    #print(tail(unique(i$nextword), 4))
   }
-  rm(i, i2, i3, sentencd)
+  rm(i, i2, i3)
 }
 
+#Katz Back Off
 discount <- 0.2
 kbo <- function(discount) {
-  i3$kbo <- ifelse((i3$freq - discount) > 0, (i3$freq - discount), 0)
-  missingmass <- 1 - sum(i3$kbo)/sum(i3$freq)
+  i2$kbo <- ifelse((i2$freq - discount)/sum(i2$freq) > 0, (i2$freq - discount)/sum(i2$freq), 0)
+  missingmass <- 1 - sum(i2$kbo)
   df1$kbo <- missingmass * df1$prob/(nrow(df1) + df1$prob)
+  df1 <- df1[order(df1$kbo, decreasing=TRUE),]
+  print(head(df1$ngram, 4))
+}
+
+#Add-One Smoothing http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf (slide 8,9)
+addone <- function(lastword){
+  addoneprob <- (1 + nrow(i3))/(nrow(df1) + df1$freq[grep(paste("^", lastword, "$", sep=""), df1$ngram)])
+  df1$addone <- addoneprob * df1$prob
+  df1 <- df1[order(df1$addone, decreasing=TRUE),]
+  print(head(df1$ngram, 4))
+}
+
+#Good-Turing Smoothing http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf (slide 11-14)
+goodturing <- function(lastword){
+  r <- df1$freq[grep(paste("^", lastword, "$", sep=""), df1$ngram)]
+  nr1 <- ifelse(nrow(df1[df1$freq==(r+1),]) == 0, (2.3 + (-0.17 * r)), nrow(df1[df1$freq==(r+1),]))
+  rstar <- (r + 1) * nr1/nrow(df1[df1$freq==r,])
+  rstar <- ifelse(rstar >=0, rstar, rstar * -1)
+  goodturingprob <- rstar/sum(df1$freq)
+  print(goodturingprob)
 }
