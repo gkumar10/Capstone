@@ -14,7 +14,7 @@ news <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.news.txt", skipNul=
 twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", skipNul=TRUE)
 
 save(df1, file="~/Coursera/CapstoneData/ngram1df.rdata")
-save(df2, file="~/Coursera/CapstoneData/ngram2df.rdata")
+save(df2, file="~/Coursera/CapstoneData/ngram2dfAllWords.rdata")
 save(df2n, file="~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 save(df3, file="~/Coursera/CapstoneData/ngram3df.rdata")
 save(df3n, file="~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
@@ -198,4 +198,9 @@ head(z[order(table(z), decreasing = TRUE)],20)
 # ngram4df <- data.frame(table(ngram4))
 # ngram5 <- NGramTokenizer(mycorpus, Weka_control(min=5, max=5))
 # ngram5df <- data.frame(table(ngram5))
+
+trim.leading <- function (x)  sub("^\\s+", "", x)
+trim.trailing <- function (x) sub("\\s+$", "", x)
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+
 
