@@ -49,7 +49,7 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- "this is great"
+sentence <- "balle balle"
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
@@ -98,7 +98,7 @@ func1 <- function(sentence)
     print(head(unique(i$nextword), 4))
     #print(tail(unique(i$nextword), 4))
   }
-  rm(i, i2, i3)
+  #rm(i, i2, i3)
 }
 
 #Katz Back Off
@@ -113,6 +113,7 @@ kbo <- function(discount) {
 
 #Add-One Smoothing http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf (slide 8,9)
 addone <- function(lastword){
+  lastword <- last1
   addoneprob <- (1 + nrow(i3))/(nrow(df1) + df1$freq[grep(paste("^", lastword, "$", sep=""), df1$ngram)])
   df1$addone <- addoneprob * df1$prob
   df1 <- df1[order(df1$addone, decreasing=TRUE),]
