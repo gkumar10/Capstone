@@ -1,4 +1,4 @@
-Coursera Capstone Project - Next Word Prediction
+Coursera Capstone - Next Word Prediction
 ========================================================
 author: Gaurav Kumar
 date: Friday August 14, 2015
@@ -9,26 +9,35 @@ Most on-screen keyboards in smartphone and tablet apps use word completion to ma
 
 The next few slides detail my attempt to go a step further and <i>predict</i> the next word without the use of partial word completion. I will explain the methodology behind prediction and how it can get better.
 
+Link to the app: https://gkumar10.shinyapps.io/capstone
+
+Snapshot:
+
+
 
 Methodology Used To Predict
 ========================================================
 I used a large English language corpus of 95Million+ words and phrases derived from Blogs, News article and Twitter feeds. 
 
-After pre-processing tasks - remove punctuations, remove numeric digits, convert to lower case, basic trimming etc - I created 1-gram, 2-gram and 3-gram data sets.
+After pre-processing - remove punctuations, remove numeric digits, convert to lower case etc - I created 1-gram, 2-gram and 3-gram data sets.
 
-The algorithm takes the written text as input and looks for matching n-gram with highest maximum likelihood estimation (MLE). If a match is not found in highest n-gram, the algorithm returns the words with highest MLE.If there is no evidence of a match algorithm backs-off to n-1-gram.
+The algorithm takes the written text as input and looks for match in n-gram with highest maximum likelihood estimation (MLE). If no evidence in highest n-gram, algorithm backs-off to n-1-gram.
 
-The unigram is useful exactly when there is no evidence in higher order grams, the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate probability using Katz Back Off models with discount of 0.2, Add-One Smoothing and Good Turing Smoothing to return the top 6 words highest probability.
+The unigram is useful exactly when there is no evidence in higher order grams - the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate probability using Katz Back Off model with discount of 0.2, Add-One Smoothing and Good Turing Smoothing to return the top 6 words with highest probability.
 
 Observations and Next Steps
 ========================================================
 The algorithm can obviously get a lot better. 
 
-In some random tests conducted by friends and family - the algorithm did a better job of predicting during early parts of the sentence (~60% correct) than the later part of the sentence (~25%). This could be due to the fact that as the number of words in a sentence increase a lot of topical context is needed.
+In some random tests conducted with the help of friends and family - the algorithm did a better job of predicting early parts of a sentence (~60% correct) than the later part of the sentence (~25%). This could be due to the fact that as the number of words in a sentence increase a lot of topical context is needed.
+
+If I were to continue building this algorithm. I would like to explore adding local app context to the corpus. For ex.context from Facebook feeds, Google Autocomplete, Whatsapp etc. These are just randome ideas at this time.
 
 
-Application
+References
 ========================================================
-Here is the link to the application.
-
-Sample screenshot:
+I refered the following sources to complete my project: 
+- http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf
+- http://www.cs.columbia.edu/~mcollins/lm-spring2013.pdf
+- Coursera Natural Language Processing Week1 video lectures https://class.coursera.org/nlangp-001/lecture
+- Ideas from Coursera Capstone Project Discussion Forums.
