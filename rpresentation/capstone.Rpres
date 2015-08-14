@@ -16,16 +16,16 @@ I used a large English language corpus of 95Million+ words and phrases derived f
 
 After pre-processing tasks - remove punctuations, remove numeric digits, convert to lower case, basic trimming etc - I created 1-gram, 2-gram and 3-gram data sets.
 
-The algorithm checks for maximum likelihood (MLE)
+The algorithm takes the written text as input and looks for matching n-gram with highest maximum likelihood estimation (MLE). If a match is not found in highest n-gram, the algorithm returns the words with highest MLE.If there is no evidence of a match algorithm backs-off to n-1-gram.
 
-Methodology Used - continued
+The unigram is useful exactly when there is no evidence in higher order grams, the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate probability using Katz Back Off models with discount of 0.2, Add-One Smoothing and Good Turing Smoothing to return the top 6 words highest probability.
+
+Observations and Next Steps
 ========================================================
+The algorithm can obviously get a lot better. 
 
-```{r, echo=FALSE}
-plot(cars)
-```
-Katz's Back-Off (BO): Instead off mixing all models at the same time start with the most detail model (with the highest n) and only “hierarchically” back-off to a lower order n-gram model if there is no evidence of the higher-order n-gram.
-The unigram is useful exactly when we haven't seen the bigram or trigram.
+In some random tests conducted by friends and family - the algorithm did a better job of predicting during early parts of the sentence (~60% correct) than the later part of the sentence (~25%). This could be due to the fact that as the number of words in a sentence increase a lot of topical context is needed.
+
 
 Application
 ========================================================
