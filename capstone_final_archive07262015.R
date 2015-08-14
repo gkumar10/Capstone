@@ -15,12 +15,14 @@ twitter <- readLines("~/Coursera/CapstoneData/final/en_US/en_US.twitter.txt", sk
 
 save(df1, file="~/Coursera/CapstoneData/ngram1df.rdata")
 save(df2, file="~/Coursera/CapstoneData/ngram2dfAllWords.rdata")
+save(df3, file="~/Coursera/CapstoneData/ngram3dfAllWords.rdata")
 save(df2n, file="~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 save(df3, file="~/Coursera/CapstoneData/ngram3df.rdata")
 save(df3n, file="~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 save(txtf, file="~/Coursera/CapstoneData/enUSFullLines.rdata")
 save(txtn, file="~/Coursera/CapstoneData/enUSNoStopWords.rdata")
 save(txt, file="~/Coursera/CapstoneData/enUSAllWords.rdata")
+save(ng3, file="~/Coursera/CapstoneData/ng3.rdata")
 
 #load rdata file
 load("~/Coursera/CapstoneData/ngram1df.rdata")
@@ -33,8 +35,9 @@ load("~/Coursera/CapstoneData/enUSFullLines.rdata")
 load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/enUSNoStopWords.rdata")
 load("~/Coursera/CapstoneData/enUSFullLines.rdata")
+load("~/Coursera/CapstoneData/ngram3dfAllWords.rdata")
 
-sapply(strsplit(str1, " "), length)
+df3$numofblanks <- sapply(strsplit(df3$ngram, " "), length)
 df3n$ngram <- sapply(df3n$ngram, as.character)
 
 #create sample data set for faster processing
@@ -63,9 +66,9 @@ df2 <- df2[nchar(as.character(df2$ngram)) > 3, ]
 ng3 <- make.ngrams(txt, ngram.size=3)
 ng3 <- gsub("^ ", "", ng3)
 ng3 <- gsub(" $", "", ng3)
-df3 <- data.frame(table(ng3), stringsAsFactors = FALSE)
+df3 <- data.frame(table(I(ng3)), stringsAsFactors = FALSE)
 names(df3) <- c("ngram", "freq")
-df3$ngram <- sapply(df3$ngram, as.character)
+df3$ngramchar <- sapply(df3$ngram, as.character)
 df3 <- df3[order(df3$freq, decreasing=TRUE), ]
 df3 <- df3[df3$freq >= 25, ]
 df3 <- df3[nchar(df3$ngram) > 3, ]
@@ -202,5 +205,6 @@ head(z[order(table(z), decreasing = TRUE)],20)
 trim.leading <- function (x)  sub("^\\s+", "", x)
 trim.trailing <- function (x) sub("\\s+$", "", x)
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+y <- data.frame(t(sapply(mylist,c))) # for offers service
 
 

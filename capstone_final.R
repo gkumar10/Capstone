@@ -4,6 +4,22 @@ require(tm)
 require(stringr)
 setwd("~/Coursera/Capstone")
 
+if (!exists("df1")) {
+  load("ngram1df.rdata")
+}
+
+if (!exists("df2")) {
+  load("ngram2df.rdata")
+}
+
+if (!exists("df3")) {
+  load("ngram3df.rdata")
+}
+
+if (!exists("strings")) {
+  require(stringr)
+}
+
 save(df1, file="~/Coursera/CapstoneData/ngram1df.rdata")
 save(df2, file="~/Coursera/CapstoneData/ngram2df.rdata")
 save(df3, file="~/Coursera/CapstoneData/ngram3df.rdata")
@@ -89,14 +105,13 @@ func1 <- function(sentence)
 
   if (nrow(i)==0) {
     df1$prob <- df1$freq/sum(df1$freq)
-    kbo(0.2)
-    addone(last1)
-    goodturing(last1)
-#    print(df1$ngram[sample(nrow(df1), 4)])
+    #kbo(0.2)
+    #addone(last1)
+    #goodturing(last1)
+    print(df1$ngram[sample(nrow(df1), 4)])
   } else {
     i$nextword <- word(i$ngram, -1)
-    print(head(unique(i$nextword), 4))
-    #print(tail(unique(i$nextword), 4))
+    print(head(unique(i$nextword), 6))
   }
   #rm(i, i2, i3)
 }

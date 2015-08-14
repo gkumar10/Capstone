@@ -54,7 +54,7 @@ nextword <- function(sentence)
     nextword <- df1$ngram[sample(nrow(df1), 4)]
   } else {
     i$nextword <- word(i$ngram, -1)
-    nextword <- head(unique(i$nextword), 4)
+    nextword <- head(unique(i$nextword), 6)
   }
   #rm(i, i2, i3)
 }
