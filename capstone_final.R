@@ -65,7 +65,7 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- "balle balle"
+sentence <- "viagra"
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
@@ -105,15 +105,15 @@ func1 <- function(sentence)
 
   if (nrow(i)==0) {
     df1$prob <- df1$freq/sum(df1$freq)
-    #kbo(0.2)
-    #addone(last1)
-    #goodturing(last1)
-    print(df1$ngram[sample(nrow(df1), 4)])
+    kbo(0.2)
+    addone(last1)
+    goodturing(last1)
+    #print(df1$ngram[sample(nrow(df1), 4)])
   } else {
     i$nextword <- word(i$ngram, -1)
     print(head(unique(i$nextword), 6))
   }
-  #rm(i, i2, i3)
+  rm(i, i2, i3)
 }
 
 #Katz Back Off
@@ -137,6 +137,7 @@ addone <- function(lastword){
 
 #Good-Turing Smoothing http://www.cs.sfu.ca/~anoop/teaching/CMPT-413-Spring-2014/smooth.pdf (slide 11-14)
 goodturing <- function(lastword){
+  lastword <- "zyrtec"
   r <- df1$freq[grep(paste("^", lastword, "$", sep=""), df1$ngram)]
   nr1 <- ifelse(nrow(df1[df1$freq==(r+1),]) == 0, (2.3 + (-0.17 * r)), nrow(df1[df1$freq==(r+1),]))
   rstar <- (r + 1) * nr1/nrow(df1[df1$freq==r,])
