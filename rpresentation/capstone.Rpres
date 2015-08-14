@@ -3,26 +3,28 @@ Coursera Capstone Project - Next Word Prediction
 author: Gaurav Kumar
 date: Friday August 14, 2015
 
-Background
+Executive Summary
+========================================================
+Most on-screen keyboards in smartphones and tablets apps use word completion to make typing easier and faster.
+
+The next few slides detail my attempt to go a step further and <i>predict</i> the next word. I will explain the methodology behind prediction and how it can get better.
+
+
+
+Methodology Used
 ========================================================
 
-For more details on authoring R presentations click the
-**Help** button on the toolbar.
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-Slide With Code
-========================================================
-
-```{r}
-summary(cars)
-```
-
-Slide With Plot
+Methodology Used - continued
 ========================================================
 
 ```{r, echo=FALSE}
 plot(cars)
 ```
+Katz's Back-Off (BO): Instead off mixing all models at the same time start with the most detail model (with the highest n) and only “hierarchically” back-off to a lower order n-gram model if there is no evidence of the higher-order n-gram.
+
+Application
+========================================================
+Here is the link to the application.
+
+Sample screenshot:
