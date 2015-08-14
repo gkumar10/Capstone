@@ -5,15 +5,18 @@ date: Friday August 14, 2015
 
 Executive Summary
 ========================================================
-Most on-screen keyboards in smartphones and tablets apps use word completion to make typing easier and faster.
+Most on-screen keyboards in smartphone and tablet apps use word completion to make typing easier and faster.
 
-The next few slides detail my attempt to go a step further and <i>predict</i> the next word. I will explain the methodology behind prediction and how it can get better.
+The next few slides detail my attempt to go a step further and <i>predict</i> the next word without the use of partial word completion. I will explain the methodology behind prediction and how it can get better.
 
 
-
-Methodology Used
+Methodology Used To Predict
 ========================================================
+I used a large English language corpus of 95Million+ words and phrases derived from Blogs, News article and Twitter feeds. 
 
+After pre-processing tasks - remove punctuations, remove numeric digits, convert to lower case, basic trimming etc - I created 1-gram, 2-gram and 3-gram data sets.
+
+The algorithm checks for maximum likelihood (MLE)
 
 Methodology Used - continued
 ========================================================
@@ -22,6 +25,7 @@ Methodology Used - continued
 plot(cars)
 ```
 Katz's Back-Off (BO): Instead off mixing all models at the same time start with the most detail model (with the highest n) and only “hierarchically” back-off to a lower order n-gram model if there is no evidence of the higher-order n-gram.
+The unigram is useful exactly when we haven't seen the bigram or trigram.
 
 Application
 ========================================================

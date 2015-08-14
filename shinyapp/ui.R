@@ -25,7 +25,7 @@ shinyUI(
     mainPanel(
       
       #show output
-      h2("Choices for next word:"),
+      h2("Output:"),
       uiOutput("nextword")
       
     )
