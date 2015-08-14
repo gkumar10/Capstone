@@ -51,7 +51,8 @@ nextword <- function(sentence)
   i <- i[order(i$prob, decreasing=TRUE),]
   
   if (nrow(i)==0) {
-    nextword <- df1$ngram[sample(nrow(df1), 4)]
+    #nextword <- df1$ngram[sample(nrow(df1), 4)]
+    nextword <- df1$ngram[1:6]
   } else {
     i$nextword <- word(i$ngram, -1)
     nextword <- head(unique(i$nextword), 6)
