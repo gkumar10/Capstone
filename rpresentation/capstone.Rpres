@@ -7,7 +7,7 @@ Executive Summary
 ========================================================
 Most on-screen keyboards in smartphone and tablet apps use word completion to make typing easier and faster.
 
-Next few slides detail my attempt to<i>predict</i> the next word instead of partial word completion. I will explain the methodology behind prediction and how it can get better.
+Next few slides detail my attempt to <i>predict</i> the next word instead of partial word completion. I will explain the methodology behind prediction and how it can get better.
 
 Shinyapps link: https://gkumar10.shinyapps.io/capstone
 
@@ -17,18 +17,18 @@ Methodology Used To Predict
 
 After pre-processing - no punctuations, no numeric digits, convert to lower case etc - I created 1-gram, 2-gram and 3-gram data sets.
 
-The algorithm takes the written text as input and looks for match in n-gram for highest maximum likelihood estimation (MLE). If no evidence in highest n-gram, algorithm backs-off to n-1-gram.
+The algorithm takes written text as input and looks for match in n-gram for highest maximum likelihood estimation (MLE). If no evidence in highest n-gram, algorithm backs-off to n-1 gram.
 
-The 1-grams are useful exactly when there is no evidence in higher order grams - the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate and compare probability using Katz Back Off model with discount of 0.2, Add-One Smoothing and Good Turing Smoothing to return the top 6 words with highest probability. More often than not the top 6 unigrams are the same.
+The 1-grams are useful exactly when there is no evidence in higher order grams - the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate and compare probability using Katz Back Off model with discount of 0.2, Add-One Smoothing and Good Turing Smoothing to return the top 6 words with highest probability. Mostly top 6 unigrams are the same.
 </font>
 
 Observations and Next Steps
 ========================================================
 The algorithm can obviously get a lot better. 
 
-In some random tests conducted with the help of friends and family - the algorithm did a better job of predicting early parts of a sentence (~60% correct) than the later part of the sentence (~25%). This could be due to long-distance dependencies - as the number of words in a sentence increases a lot of topical context is needed to increase likelihood of successful match.
+In some random tests conducted with the help of friends and family - the algorithm did a better job of predicting early parts of a sentence (~60% correct) than the later part of the sentence (~25%). This could be due to long-distance dependencies - as the number of words in a sentence increases, a lot of topical context is needed to increase likelihood of successful match.
 
-If I were to continue building this algorithm. I would explore adding local app context to the corpus. For ex.context from Facebook feeds, Google Autocomplete, Whatsapp etc. These are just random ideas at this time.
+If I were to continue building this algorithm. I would explore adding local app context to the corpus. For ex. context from Facebook feeds, Google Autocomplete, Whatsapp etc. These are just random ideas at this time.
 
 
 References
