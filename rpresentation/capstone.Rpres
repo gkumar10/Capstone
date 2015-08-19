@@ -19,7 +19,7 @@ After pre-processing - no punctuations, no numeric digits, convert to lower case
 
 The algorithm takes the written text as input and looks for match in n-gram for highest maximum likelihood estimation (MLE). If no evidence in highest n-gram, algorithm backs-off to n-1-gram.
 
-The 1-grams are useful exactly when there is no evidence in higher order grams - the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate probability using Katz Back Off model with discount of 0.2, Add-One Smoothing and Good Turing Smoothing to return the top 6 words with highest probability.
+The 1-grams are useful exactly when there is no evidence in higher order grams - the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate and compare probability using Katz Back Off model with discount of 0.2, Add-One Smoothing and Good Turing Smoothing to return the top 6 words with highest probability. More often than not the top 6 unigrams are the same.
 </font>
 
 Observations and Next Steps

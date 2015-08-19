@@ -65,7 +65,7 @@ txt18 <- "Every inch of you is perfect from the bottom to the"
 txt19 <- "I’m thankful my childhood was filled with imagination and bruises from playing"
 txt20 <- "I like how the same people are in almost all of Adam Sandler's"
 
-sentence <- "balle"
+sentence <- "time of next"
 func1(sentence)
 
 #code to grep last 1-2-3 words from sentence -> query against n-gram dfs -> return words with probability/frequency listed
