@@ -31,13 +31,8 @@ load("~/Coursera/CapstoneData/ngram2df.rdata")
 load("~/Coursera/CapstoneData/ngram3df.rdata")
 load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
+load("~/Coursera/CapstoneData/ngram2dfAllWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
-
-df1$whichngram <- c("unigram")
-df2$whichngram <- c("bigram")
-df3$whichngram <- c("trigram")
-df2n$whichngram <- c("bigram")
-df3n$whichngram <- c("trigram")
 
 #sapply(strsplit(str1, " "), length)
 #df3$ngram <- sapply(df3$ngram, as.character)
@@ -143,7 +138,7 @@ goodturing <- function(lastword){
   #rstar <- (r + 1) * nr1/nrow(df1[df1$freq==r,])
   rstar <- (r + 1) * nr1/df1$freq[df1$freq==r]
   rstar <- ifelse(rstar >=0, rstar, rstar * -1)
-  goodturingprob <- rstar/sum(df1$freq)
+  #goodturingprob <- rstar/sum(df1$freq)
   goodturingprob <- length(df1$freq[df1$freq==min(df1$freq)])/nrow(df1)
   goodturingdf <- df1[df1$prob >= goodturingprob,]
   ifelse(nrow(goodturingdf) < 1, print(head(df1$ngram, 6)), print(head(goodturingdf$ngram, 6)))
