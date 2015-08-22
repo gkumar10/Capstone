@@ -51,11 +51,20 @@ nextword <- function(sentence)
   i <- i[order(i$prob, decreasing=TRUE),]
   
   if (nrow(i)==0) {
-    #nextword <- df1$ngram[sample(nrow(df1), 4)]
-    nextword <- df1$ngram[1:6]
+    nextword <- unique(goodturing(last1))
   } else {
     i$nextword <- word(i$ngram, -1)
     nextword <- head(unique(i$nextword), 6)
   }
-  #rm(i, i2, i3)
+}
+
+goodturing <- function(lastword){
+  r <- as.numeric(df1$freq[grep(paste("^", lastword, "$", sep=""), df1$ngram)])
+  nr1 <- ifelse(nrow(df1[df1$freq==(r+1),]) == 0, (2.3 + (-0.17 * 0)), nrow(df1[df1$freq==(r+1),]))
+  rstar <- (r + 1) * nr1/nrow(df1[df1$freq==r,])
+  rstar <- ifelse(rstar >=0, rstar, rstar * -1)
+  goodturingprob <- rstar/sum(df1$freq)
+  i <- df1[df1$prob >= goodturingprob,]
+  charset <- c("is", "in", "for", "as", "at", "the", "of", "and", "a", "to")
+  goodturing <- if (nrow(i) >= 1) head(i$ngram, 6) else sample(charset, 6)
 }
