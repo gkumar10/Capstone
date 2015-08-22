@@ -32,6 +32,7 @@ load("~/Coursera/CapstoneData/ngram3df.rdata")
 load("~/Coursera/CapstoneData/ngram2dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/ngram3dfNoStopWords.rdata")
 load("~/Coursera/CapstoneData/ngram2dfAllWords.rdata")
+load("~/Coursera/CapstoneData/ngram3dfAllWords.rdata")
 load("~/Coursera/CapstoneData/enUS.rdata")
 
 #sapply(strsplit(str1, " "), length)

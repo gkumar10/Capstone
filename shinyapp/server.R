@@ -12,7 +12,7 @@ shinyServer(
           predictedwords <- nextword(input$sentence)
           HTML('<b>Best choice of next word:</b> <br>',
              ifelse(is.na(predictedwords[1]), "No prediction of next word. Please try a different phrase.", predictedwords[1]), '<br><br>',
-             ifelse(is.na(predictedwords[2]), "", '<b>Other choices:</b> <br>'),
+             ifelse(is.na(predictedwords[2]), "", '<b>Other choices (optional):</b> <br>'),
              ifelse(is.na(predictedwords[2]), "", predictedwords[2]), '<br>',
              ifelse(is.na(predictedwords[3]), "", predictedwords[3]), '<br>',
              ifelse(is.na(predictedwords[4]), "", predictedwords[4]), '<br>',
