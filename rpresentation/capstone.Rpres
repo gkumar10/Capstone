@@ -5,16 +5,24 @@ date: Friday August 21, 2015
 
 Executive Summary
 ========================================================
-Most on-screen keyboards in smartphone and tablet apps use word completion to make typing easier and faster.
+<font size=5>Most on-screen touch keyboards in mobile apps use word completion to make typing easier and faster.
 
 Next few slides detail my attempt to <i>predict</i> the next word instead of partial word completion. I will explain the methodology behind prediction and how it can get better.
 
 <u>App Description and Instructions:</u>
 
-To use the app - type a phrase with at least 1 word and click 'Predict Next Word' button. The app will suggest best choice of next word. The app will also present other available choices.
+The app will suggest best choice of next word for input text. The app will also suggest other available word choices depending on your preference.
+
+To use the app - follow the instructions:
+
+1. Type a phrase with at least 1 word.
+
+2. Select the checkbox if you want to see other available word choices.
+
+3. Click 'Predict Next Word' button. 
 
 Shinyapps link: https://gkumar10.shinyapps.io/capstone
-
+</font>
 
 Methodology Used To Predict
 ========================================================
@@ -31,7 +39,7 @@ Observations and Next Steps
 ========================================================
 The algorithm can obviously get a lot better. 
 
-In some random tests conducted with the help of friends and family - the algorithm did a better job of predicting early parts of a sentence (~60% correct) than the later part of the sentence (~25%). This could be due to long-distance dependencies - as the number of words in a sentence increases, a lot of topical context is needed to increase likelihood of successful match.
+In random tests conducted with the help of friends and family - the algorithm did a better job of predicting early parts of a sentence (~60% correct) than the later part of sentence (~25%). This could be due to long-distance dependencies - as the number of words in a sentence increases, a lot of topical context is needed to increase likelihood of successful match.
 
 If I were to continue building this algorithm. I would explore adding local app context to the corpus. For ex. context from Facebook feeds, Google Autocomplete, Whatsapp etc. These are just random ideas at this time.
 
