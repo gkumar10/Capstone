@@ -9,7 +9,12 @@ Most on-screen keyboards in smartphone and tablet apps use word completion to ma
 
 Next few slides detail my attempt to <i>predict</i> the next word instead of partial word completion. I will explain the methodology behind prediction and how it can get better.
 
+<u>App Description and Instructions:</u>
+
+To use the app - type a phrase with at least 1 word and click 'Predict Next Word' button. The app will suggest best choice of next word. The app will also present other available choices.
+
 Shinyapps link: https://gkumar10.shinyapps.io/capstone
+
 
 Methodology Used To Predict
 ========================================================
@@ -19,7 +24,7 @@ After pre-processing - no punctuations, no numeric digits, convert to lower case
 
 The algorithm takes written text as input and looks for match in n-gram for highest maximum likelihood estimation (MLE). If no evidence in highest n-gram, algorithm backs-off to n-1 gram.
 
-The 1-grams are useful exactly when there is no evidence in higher order grams - the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate probability of unseen grams using Good Turing Smoothing to return words with higher probability. I used formulas learnt from video lectures of Natural Language Processing class in Coursera as referenced in next slide.
+The 1-grams are useful when there is no evidence in higher order grams - the 2-gram and 3-gram in my algorithm. At the unigram level, I calculate probability of unseen grams using Good Turing Smoothing to return words with higher probability. I used formulas learnt from video lectures of Natural Language Processing class in Coursera as referenced in 'References' slide.
 </font>
 
 Observations and Next Steps
